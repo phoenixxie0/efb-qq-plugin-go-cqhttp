@@ -195,6 +195,9 @@ class GoCQHttp(BaseClient):
                 chat: Chat
                 author: ChatMember
 
+                # ignore qq guild message
+                if context["message_type"] == "guild":
+                    return
                 user = await self.get_user_info(qq_uid)
                 if context["message_type"] == "private":
                     context["alias"] = user["remark"]
@@ -398,7 +401,7 @@ class GoCQHttp(BaseClient):
                     "file_id": context["file"]["id"],
                     "busid": context["file"]["busid"],
                 }
-                self.async_download_group_file(**param_dict)
+                await self.async_download_group_file(**param_dict)
 
             asyncio.create_task(_handle_group_file_upload_msg())
 
